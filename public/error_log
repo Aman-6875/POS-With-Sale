@@ -1,0 +1,2 @@
+[26-Mar-2019 11:04:21 UTC] PHP Parse error:  syntax error, unexpected '?' in /home/pixonlab/posdemo.pixonlab.com/vendor/symfony/http-foundation/Response.php on line 501
+[26-Mar-2019 11:04:21 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0

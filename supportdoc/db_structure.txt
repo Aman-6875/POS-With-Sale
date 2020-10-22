@@ -1,0 +1,201 @@
+1. Change .env file
+2. Run Migration command: php artisan migrate
+3. Run Db seeder command: php artisan db:seed
+4. Run pproject (Authentication is not added. we will added later)
+
+# Support Command
+1. Create Model,  Migration:   php artisan make:model Outlet -mcr (use camelcase as model name , dont use plural number. example model name : user)
+2. Crate Seeder: php artisan make:seeder OutletsSeeder
+3. Get last Inserted ID insertGetId:
+  $id = DB::table('users')->insertGetId(
+      ['email' => 'john@example.com', 'votes' => 0]
+    );
+
+
+OutletsTable
+...........
+outlet_id
+outlet_name
+outlet_phone
+outlet_address
+outlet_active_status
+
+ProductsCategoryTable
+....................
+product_category_id
+product_category_name
+product_category_image
+outlet_id (Foreign ID)
+
+ProductsTable
+.................
+product_id
+product_code  (Barcode/Qr code)
+product_name
+product_category_id  (ProductCategoryTable category_id/ Foreign ID)
+product_image
+product_description
+outlet_id (Foreign ID)
+
+ProductDetailstable
+.......................
+product_detils_id
+product_title
+product_purchase_price
+product_retail_price
+product_id (Foreign ID)
+outlet_id (Foreign ID)
+
+ExpenseCategoryTable
+.....................
+expense_category_id
+expense_category_name
+expense_category_image
+outlet_id (Foreign ID)
+
+
+ExpenseTable
+............
+expense_id
+expense_name
+expense_amount
+expense_details
+expense_category_id  (Foreign ID)
+outlet_id (Foreign ID)
+
+SupplierTable
+...............
+supplier_id
+supplier_name
+supplier_email ->nullable()
+supplier_phone ->nullable()
+supplier_address ->nullable()
+supplier_company ->nullable()
+outlet_id (Foreign ID)
+
+
+Customertable
+...............
+customer_id
+customer_name
+customer_email ->nullable()
+customer_phone ->nullable()
+customer_address ->nullable()
+customer_company ->nullable()
+outlet_id (Foreign ID)
+
+
+Updated: 08.07.2018
+...............................................................................
+SellTable (Model Sell)
+......................
+sell_id
+product_id (product_details_id)
+customer_id
+invoice    (date('YmdHis'))
+grand_total_price
+given_amount
+change
+discount_amount
+total_vat
+delivery_charge default(0)
+paid_status (1=paid, 0=due)
+
+
+SellItem (Model SellItem)
+...............
+sell_item_id
+invoice
+quantity
+unit_price
+
+
+DiscountTable (Model Discount)
+..................
+discount_id
+product_id
+discount_rate (%)
+
+
+VatTable (Model Vat)
+................
+vat_id
+vat_rate
+comments
+
+RoleTable()
+..................
+role_id
+role_name
+comments
+
+UserTable
+..................
+user_id
+user_name
+user_email
+user_image
+user_phone nullable
+user_address
+user_company
+password
+user_type
+role_id
+
+Units
+.......
+unit_id
+unit_name
+unit_short_name
+Allow_decimal
+
+
+
+
+Task: 23.07.2018
+......................
+1. outlet_id added into all table
+    - Age outlet_id fixed kora silo , ekhon outlet id paben sessionn theke.
+        Protita insert code a outlet_id session theke niye insert korben.
+         $outlet_id = session('outlet_id');
+    - Onek table a outlet_id age silona, notunavbe add kora hoyeche. sobgulitei insert er time a outlet_id session theke niye insert korben
+
+2. Product_details table a barcode add kora hoise. add product a giye ekta notun input form niben, sekhan theke barcode niye
+    product_details array te vore product_details table a insert korben.
+
+3. view koranor somoye session theke outlet_id niye view koraben.
+4. insert/update/view purchase table
+
+
+Purchase
+...........
+purchase_id
+product_id          (eta asbe product_details table theke , product_details_id)
+supplier_id         (Supplier table theke)
+quantity
+total_price
+notes nullable()
+user_id             (je user login thakbe tar id, session theke paben,  $user_id = session('user_id');)
+
+
+Task: 01.08.2018
+.................
+- Purchase add/edit update
+
+##Report Section
+Only ReportController banaben (no model, migration)
+- Profit loss (only View page banaye rakhben)
+- Purchase & sell (Date range select korbe oi date er majhe joto entry ase sob slect hoye view hobe, sells and sell_items table a kisu dummy data input diye raikhen)
+- Product purchase (purchase er okhane je view thakbe setai, only date range wise serach er option thakbe)
+- Product Sell Report (same as sell->list sell page,  only date range wise serach er option thakbe)
+
+- Excel Import Product, eta ase Product er sub menu te. (School  management a sample code ase. Product add er somoy database a ja ja save hosse sob e excel column a thakbe)
+        -> https://github.com/Maatwebsite/Laravel-Excel
+        -> https://laravel-excel.maatwebsite.nl/docs/3.0/getting-started/installation
+
+- Dashboard ()
+
+*** jodi kono logic a atkaye jan. view banaye jototuku parben ototuku korben.
+
+
+
