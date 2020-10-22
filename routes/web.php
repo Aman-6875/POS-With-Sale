@@ -207,6 +207,7 @@ Route::get('/pos', 'PosController@index');
 
 //Manage Report
 Route::any('/report/profit/show', 'ReportController@profit');
+
 Route::any('/report/sell', 'ReportController@sellReport');
 Route::any('/report/sell/product', 'ReportController@sellByProductReport');
 Route::any('/report/sell/salesman', 'ReportController@sellBySalesmanReport');
@@ -214,6 +215,17 @@ Route::any('/daily/report/show', 'ReportController@dailySellReport');
 Route::any('/daily/report/profit/loss/show', 'ReportController@dailyProfitLoss');
 Route::any('/current-week/report/profit/loss/show', 'ReportController@currentWeekProfitLoss');
 Route::any('/current-month/report/profit/loss/show', 'ReportController@currentMonthProfitLoss');
+
+
+
+//Manage Daily Sell
+Route::get('/daily-sale', 'DailySaleController@index');
+
+Route::get('/daily-sale/product', 'DailySaleController@productView');
+Route::get('/daily-sale/product/result', 'DailySaleController@productResult');
+
+Route::get('/daily-sale/report', 'DailySaleController@report');
+
 
 
 

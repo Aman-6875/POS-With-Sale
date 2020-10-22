@@ -96,6 +96,17 @@
 
                     </ul>
                 </li>
+
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-shopping-cart"></i>
+                        <span>Daily Sale </span>
+                        <span class="menu-arrow"></span> </a>
+                    <ul class="list-unstyled">
+                        <li><a href="/daily-sale">Sale</a></li>
+                        <li><a href="/daily-sale/report">Report</a></li>
+
+                    </ul>
+                </li>
                 {{-- <li class="has_sub">
                      <a href="javascript:void(0);" class="waves-effect"><i class="ti-exchange-vertical"></i> <span>Sell Return</span>
                          <span class="menu-arrow"></span> </a>
