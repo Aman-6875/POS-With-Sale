@@ -221,12 +221,13 @@ Route::any('/current-month/report/profit/loss/show', 'ReportController@currentMo
 //Manage Daily Sell
 Route::get('/daily-sale', 'DailySaleController@index');
 
-Route::get('/daily-sale/product', 'DailySaleController@productView');
+// Route::get('/daily-sale/product', 'DailySaleController@productView');
+
 Route::get('/daily-sale/product/result', 'DailySaleController@productResult');
 
 Route::get('/daily-sale/report', 'DailySaleController@report');
 
-
+Route::get('/daily-sale/product', 'DailySaleController@testproductView');
 
 
 
