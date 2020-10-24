@@ -113,7 +113,13 @@ class DailySaleController extends Controller
 
     public function testproductView()
     {
-        $product = Product::join('product_details','product_details.product_id','=','products.product_id')->get();
+         $product = Product::join('product_details','product_details.product_id','=','products.product_id')->get();
+        return view('pages.daily_sale.test')->with('products',$product);
+    }
+
+    public function testproductData()
+    {
+         $product = Product::join('product_details','product_details.product_id','=','products.product_id')->get();
         return view('pages.daily_sale.test')->with('products',$product);
     }
 }

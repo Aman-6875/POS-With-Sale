@@ -12,7 +12,7 @@
                        <form >
                         <div class="row">
                          <div class="col-md-5">
-                                <select class="selectized" name="product_id">
+                                <select class="selectized" name="product_id" ng-model="product_id" ng-change="productChange(product_id)">
                                     @foreach( $products as $product)
                                          <option value="{{ $product->product_id}}">
                                              {{ $product->product_name }}
@@ -119,17 +119,22 @@
             console.log("jj");
 
             $scope.rate = 10;
-            $scope.product_id = 1;   
-            $scope.in = 1;   
+            $scope.product_id = '';   
+            $scope.in = 0;   
             $scope.out = 0;   
-            $scope.rate = 10;
+            $scope.rate = 0;
 
 
              $scope.outChange = function (out) {
 
                 console.log("loll" + out);
-                console.log($scope.rate);
+               
                 
+            };
+
+            $scope.productChange = function (product_id) {
+                console.log('lol'+product_id);
+              
             };
 
             $scope.add = function(){
@@ -142,10 +147,9 @@
                         };
                         console.log(tempData);
             };
-            
-
-
          });
+
+         
 
     </script>
 
