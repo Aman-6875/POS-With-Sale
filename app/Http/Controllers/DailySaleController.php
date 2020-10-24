@@ -7,6 +7,7 @@ use App\DailySale;
 use App\Product;
 use App\ProductDetail;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -113,13 +114,63 @@ class DailySaleController extends Controller
 
     public function testproductView()
     {
-         $product = Product::join('product_details','product_details.product_id','=','products.product_id')->get();
+          
+          $product = Product::join('product_details','product_details.product_id','=','products.product_id')->get();
         return view('pages.daily_sale.test')->with('products',$product);
     }
 
-    public function testproductData()
+    public function testproductData(Request $request)
     {
-         $product = Product::join('product_details','product_details.product_id','=','products.product_id')->get();
-        return view('pages.daily_sale.test')->with('products',$product);
+
+          $mytime =Carbon::now()->format('Y-m-d ');
+      
+        //return $request->all();
+
+        if ($request->isMethod('post')) {
+            
+          $product_id=$request['product_id'];
+
+
+          $product = Product::join('product_details','product_details.product_id','=','products.product_id')->where('products.product_id',$product_id)->first();
+          $dailySale = [
+            'product_id'=> $product->product_id,
+            'product_out'=> $request['product_out'],
+            'rate'=> $product->product_retail_price, 
+            'product_in'=> 0,
+            'damage'=>0,
+            'damage_value'=>0,
+            'return'=>0,               
+          ];
+          $d = DailySale::where('product_id',$product_id)->whereDate('created_at',$mytime)->get();
+        if(Count($d)<1){
+            $data = DailySale::create($dailySale);
+
+            return [
+                'status' => 'success',
+                'products' => $data,
+                'message' => 'successfully Saved'
+            ];
+        }else{
+            $data=  DailySale::join('products','daily_sales.product_id','=','products.product_id')->get();
+
+            return [
+                'status' => 'failed',
+                'products' => $data,
+                'message' => 'successfully Saved'
+            ];
+
+        }
+          
+        }
+
+
+        $data=  DailySale::join('products','daily_sales.product_id','=','products.product_id')->get();
+
+        return [
+            'status' => 'success',
+            'products' => $data,
+            'message' => 'successfully Saved'
+        ];
+
     }
 }

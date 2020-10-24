@@ -23,9 +23,9 @@
                 <div class="row">
                     
                         
-                            <div class="col-md-9">
+                            <div class="col-md-3">
 
-                                <select class="selectized" >
+                                <select class=" form-control selectized" >
                                     @foreach( $users as $user)
                                          <option value="{{ $user->customer_id}}">
                                              {{ $user->customer_name }}
@@ -38,7 +38,7 @@
 
                             
                          <div class="col-3">
-                                    <a  href="/daily-sale/product" type="submit" class="btn btn-info waves-effect waves-light">Search
+                                    <a  href="/daily-sale/product" type="submit" class="btn btn-info waves-effect waves-light">Assign
                                     </a>
                          </div>
                            
