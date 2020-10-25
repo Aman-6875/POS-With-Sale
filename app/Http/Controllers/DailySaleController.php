@@ -119,6 +119,8 @@ class DailySaleController extends Controller
         return view('pages.daily_sale.test')->with('products',$product);
     }
 
+   
+
     public function testproductData(Request $request)
     {
 
@@ -143,7 +145,9 @@ class DailySaleController extends Controller
           ];
           $d = DailySale::where('product_id',$product_id)->whereDate('created_at',$mytime)->get();
         if(Count($d)<1){
-            $data = DailySale::create($dailySale);
+            $d = DailySale::create($dailySale);
+            $data=  DailySale::join('products','daily_sales.product_id','=','products.product_id') ->whereDate('daily_sales.created_at',$mytime)->get();
+            
 
             return [
                 'status' => 'success',
@@ -151,8 +155,8 @@ class DailySaleController extends Controller
                 'message' => 'successfully Saved'
             ];
         }else{
-            $data=  DailySale::join('products','daily_sales.product_id','=','products.product_id')->get();
-
+            $data=  DailySale::join('products','daily_sales.product_id','=','products.product_id') ->whereDate('daily_sales.created_at',$mytime)->get();
+            
             return [
                 'status' => 'failed',
                 'products' => $data,
@@ -164,8 +168,8 @@ class DailySaleController extends Controller
         }
 
 
-        $data=  DailySale::join('products','daily_sales.product_id','=','products.product_id')->get();
-
+        $data=  DailySale::join('products','daily_sales.product_id','=','products.product_id') ->whereDate('daily_sales.created_at',$mytime)->get();
+            
         return [
             'status' => 'success',
             'products' => $data,
@@ -173,4 +177,29 @@ class DailySaleController extends Controller
         ];
 
     }
+
+
+
+
+
+
+    public function testproductDataUpdate(Request $request)
+    {
+
+          $mytime =Carbon::now()->format('Y-m-d ');
+         $d = $request->except('product_id');
+      
+            DailySale::where('product_id',$request->product_id)->whereDate('created_at',$mytime)->update($d);
+            $data=  DailySale::join('products','daily_sales.product_id','=','products.product_id') ->whereDate('daily_sales.created_at',$mytime)->get();
+     
+      return [
+            'status' => 'success',
+            'products' => $data,
+            'message' => 'updated  Successfully'
+            ];
+
+      
+          
+        }
+    
 }

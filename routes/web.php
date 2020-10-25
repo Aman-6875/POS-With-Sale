@@ -224,11 +224,10 @@ Route::get('/daily-sale', 'DailySaleController@index');
 // Route::get('/daily-sale/product', 'DailySaleController@productView');
 
 Route::get('/daily-sale/product/result', 'DailySaleController@productResult');
-
 Route::get('/daily-sale/report', 'DailySaleController@report');
-
 Route::get('/daily-sale/product', 'DailySaleController@testproductView');
 Route::any('/daily-sale/product/data', 'DailySaleController@testproductData');
+Route::post('/daily-sale/product/data/update', 'DailySaleController@testproductDataUpdate');
 
 
 

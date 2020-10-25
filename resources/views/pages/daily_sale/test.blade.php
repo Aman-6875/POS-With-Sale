@@ -29,6 +29,12 @@
                                 <input type="number" class="form-control" name="out" ng-model="out" ng-change="outChange(out)">
                             </div>
                         </div>                 
+                         {{-- <div class="form-group row">
+                            <label class="col-2 col-form-label">IN</label>
+                            <div class="col-md-10">
+                                <input type="number" class="form-control" name="in" ng-model="in" ng-change="inChange(in)">
+                            </div>
+                        </div>                  --}}
                          <div class="col-2">
                                     <button  type="submit" class="btn btn-info waves-effect waves-light" ng-click="add()">Add</button>
                          </div>
@@ -44,7 +50,7 @@
                                     <thead>
                                     <tr>
                                         
-                                        <th>Product Nmae</th>                                      
+                                        <th>Product Name</th>                                      
                                         <th>Out</th>                                      
                                         <th>In</th>                                      
                                         <th>Sales</th>                                      
@@ -75,7 +81,7 @@
                                                 <td> [- product.return -]</td>
                                                 <td> [- product.damage -]</td>
                                                 <td> [- product.damage_value -]</td>
-                                                <td> <a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal[- product.product_id -]">
+                                                <td> <a href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal[- product.product_id -]" ng-click="action(product.product_out,product.product_in,product.return,product.damage,product.damage_value)">
                                                    Action
                                                 </a>
                                                 </td>
@@ -87,7 +93,7 @@
                                                     <div class="modal-dialog" role="document">
                                                       <div class="modal-content">
                                                         <div class="modal-header">
-                                                          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                          <h5 class="modal-title" id="exampleModalLabel">Update Daily Sales</h5>
                                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                           </button>
@@ -96,42 +102,42 @@
                                                             <div class="form-group row">
                                                                 <label class="col-2 col-form-label">Out</label>
                                                                 <div class="col-10">
-                                                                    <input type="text" class="form-control" name="out"
-                                                                            value="[- product.product_id -]"required>
+                                                                    <input type="text" class="form-control" name="out" ng-model="out_edit" 
+                                                                            value="[- product.product_out -]" required>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
                                                                 <label class="col-2 col-form-label">In</label>
                                                                 <div class="col-10">
-                                                                    <input type="text" class="form-control" name="out"
-                                                                           value="" required>
+                                                                    <input type="text" class="form-control" name="in" ng-model="in_edit" 
+                                                                           value="[- product.product_in -]" required>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
                                                                 <label class="col-2 col-form-label">Return</label>
                                                                 <div class="col-10">
-                                                                    <input type="text" class="form-control" name="out"
-                                                                           value="" required>
+                                                                    <input type="text" class="form-control" name="return" ng-model="return_edit" 
+                                                                           value="[- product.return -]" required>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
                                                                 <label class="col-2 col-form-label">Damage</label>
                                                                 <div class="col-10">
-                                                                    <input type="text" class="form-control" name="out"
-                                                                           value="" required>
+                                                                    <input type="text" class="form-control" name="damage" ng-model="damage_edit" 
+                                                                           value="[- product.damage -]" required>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
                                                                 <label class="col-2 col-form-label">Damage Value</label>
                                                                 <div class="col-10">
-                                                                    <input type="text" class="form-control" name="out"
-                                                                            value="" required>
+                                                                    <input type="text" class="form-control" name="damage_value" ng-model="damage_value_edit"
+                                                                            value="[- product.damage_value -]" required>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                          <button type="button" class="btn btn-primary">Save changes</button>
+                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> 
+                                                          <button type="button" class="btn btn-primary" ng-click="saveData(out_edit,in_edit,return_edit,damage_edit,damage_value_edit,[product.product_id])" >Save changes</button>
                                                         </div>
                                                       </div>
                                                     </div>
@@ -175,6 +181,7 @@
             $scope.in = 0;   
             $scope.out = 0;   
             $scope.rate = 0;
+      
 
 
              $scope.outChange = function (out) {
@@ -184,16 +191,16 @@
                 
             };
 
+            
+
+            
+
             $scope.productChange = function (product_id) {
                 console.log('lol'+product_id);
               
             };
 
-            $scope.outModel = function () {
-                console.log('lol');
-                
-              
-            };
+        
 
             $scope.add = function(){
                
@@ -223,6 +230,59 @@
                             console.log(response.data);
                             toaster.pop('error',"There is an error, try later");
                     });
+               
+            };
+
+            $scope.saveData = function(out,inn,returnn,damage,damage_value,product_id){
+                console.log(out+"--"+inn+"--"+returnn+"--"+damage+"--"+damage_value+"--"+product_id);
+                $('#modalwindow').modal('hide');
+                $http({
+                        url: '/daily-sale/product/data/update',
+                        method: "post",
+                        data: { 
+                            product_out: out,
+                            product_in: inn,
+                            damage: damage,
+                            damage_value: damage_value,
+                            return: returnn,
+                            product_id: product_id,
+                         }
+                    })
+                    .then(function(response) {
+                            // success
+                            console.log(response.data);
+
+                            $scope.products=response.data.products;
+                            if(response.data.status=="success"){
+                                $scope.products=response.data.products;
+                                toaster.pop('success',"Successfully Updated");
+                            }else{
+                                toaster.pop('error',"There is a problem try next time");
+                            }
+
+                             $('#exampleModal'+product_id).modal('hide');
+                             location.reload();
+                            
+                           
+                    }, 
+                    function(response) { // optional
+                            // failed
+                            console.log(response.data);
+                            toaster.pop('error',"There is an error, try later");
+                    });
+
+                    
+            };
+
+            $scope.action = function(out,inn,returnn,damage,damage_value){
+                console.log("fff");
+
+
+                $scope.out_edit=out;
+                $scope.in_edit=inn;
+                $scope.return_edit=returnn;
+                $scope.damage_edit=damage;
+                $scope.damage_value_edit=damage_value;
                
             };
 
