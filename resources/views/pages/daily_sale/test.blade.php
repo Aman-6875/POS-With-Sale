@@ -12,7 +12,7 @@
                        <form >
                         <div class="row">
                             
-                         <div class="col-md-4">
+                         <div class="col-md-3">
                                 <select class="form-control selectized" name="product_id" ng-model="product_id" ng-change="productChange(product_id)">
                                    
                                     @foreach( $products as $product)
@@ -23,21 +23,35 @@
 
                                 </select>
                          </div> 
-                         <div class="form-group row">
-                            <label class="col-2 col-form-label">Out</label>
-                            <div class="col-md-10">
-                                <input type="number" class="form-control" name="out" ng-model="out" ng-change="outChange(out)">
-                            </div>
-                        </div>                 
+                         <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">Out</label>
+                                <div class="col-md-10">
+                                    <input type="number" class="form-control" name="out" ng-model="out" ng-change="outChange(out)">
+                                </div>
+                            </div>  
+                         </div> 
+                         <div class="col-2">
+                            <button  type="submit" class="btn btn-info waves-effect waves-light" ng-click="add()">Add</button>
+                        </div>
+                         <div class="col-md-3">
+                                @php
+                                    use Carbon\Carbon;
+                                    $date = Carbon::now()->format('l   dM  Y');
+                                    
+                                @endphp
+                                <h3>{{$date}}</h3>
+                         </div> 
+                         
+
+                                       
                          {{-- <div class="form-group row">
                             <label class="col-2 col-form-label">IN</label>
                             <div class="col-md-10">
                                 <input type="number" class="form-control" name="in" ng-model="in" ng-change="inChange(in)">
                             </div>
                         </div>                  --}}
-                         <div class="col-2">
-                                    <button  type="submit" class="btn btn-info waves-effect waves-light" ng-click="add()">Add</button>
-                         </div>
+                        
                         </div>
                        </form>
                  
@@ -260,11 +274,17 @@
                                 toaster.pop('error',"There is a problem try next time");
                             }
 
-                             $('#exampleModal'+product_id).modal('hide');
-                             location.reload();
+                             //$('#exampleModal'+product_id).modal("hide");
+                            //  $(".modal-fade").modal("hide");
+
+                             $(".modal-fade").modal("hide");
+                            $(".modal-backdrop").remove();
+                            
+                            //  location.reload();
                             
                            
                     }, 
+                 
                     function(response) { // optional
                             // failed
                             console.log(response.data);
