@@ -104,6 +104,7 @@
                     <ul class="list-unstyled">
                         <li><a href="/daily-sale">Sale</a></li>
                         <li><a href="/daily-sale/report">Report</a></li>
+                        <li><a href="/sales-man/show">Sales Man</a></li>
 
                     </ul>
                 </li>

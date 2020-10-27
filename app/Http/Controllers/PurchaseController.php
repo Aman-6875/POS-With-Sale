@@ -53,7 +53,8 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
-        return $request->all();
+        //return $request->all();
+        
         $user_id = session('user_id');
         unset($request['_token']);
         $request->validate([

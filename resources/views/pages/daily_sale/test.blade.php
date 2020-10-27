@@ -84,7 +84,7 @@
 
 
                                     <tr ng-repeat="product in products" ng-cloak
-                                        ng-init="countInit((product.product_out-product.product_in)*product.rate)">
+                                        ng-init="countInit(((product.product_out-product.product_in)*product.rate),product.damage_value)">
 
 
                                         <td> [- product.product_name -]</td>
@@ -184,14 +184,68 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> 
+                    
+                </div>
+            </div>
 
 
-                    <p ng-bind="sub_total"></p>
+            <div class="card-box">
+                <div class="panel-body">
+
+                    <form>
+                        <div class="row">
+
+                          
+                            <div class="col-md-5">
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Claim</label>
+                                    <div class="col-md-10">
+                                        <input type="number" class="form-control" name="out" ng-model="claim"
+                                               ng-change="claimChange(claim)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Due</label>
+                                    <div class="col-md-10">
+                                        <input type="number" class="form-control" name="due" ng-model="due"
+                                               ng-change="dueChange(due)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-info waves-effect waves-light" ng-click="addDetails()">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+
+                 
+
+
+                    
+
+
+
+
+                    <p ng-cloak>Total Amount:[-sub_total-]tk</p>
+                    <p ng-cloak>Damage Value: [-damage_value-]tk </p>
+                    <p ng-cloak>Claim:[-claim-]</p>
+                    <p ng-cloak>Net Amount [-((sub_total)-(claim)-(damage_value))-] </p>
+                    <p ng-cloak>Due:[-due-]</p>
+                    <p ng-cloak>Cash:[-(net_amount-due)-]</p>
+                    
                 </div>
             </div>
 
         </div>
+        @php
+            $var = $sales_man_id;
+        @endphp
 
     </div>
 
@@ -217,11 +271,35 @@
             $scope.claim = 0;
             $scope.due = 0;
             $scope.cash = 0;
+            
+            
+            $scope.net_amount = 0;
+            $scope.cash = 0;
+           // $scope.sales_man = $sales_man_id;
+           // $scope.sells_man_id = $sales_man_id;
+           //spge = '<?php echo $var ;?>';
+            $scope.sales_man = '<?php echo $var ;?>';
+         //  spge = '<?php echo $var ;?>';
+        //    alert($scope.sales_man);
 
 
             $scope.outChange = function (out) {
 
-                console.log("loll" + out);
+                console.log("loll" + out+ "loll" +$scope.sales_man );
+
+
+            };
+
+            $scope.claimChange = function (claim) {
+
+                console.log("loll" + claim );
+
+
+            };
+
+            $scope.dueChange = function (due) {
+
+                console.log("loll" + due );
 
 
             };
@@ -242,7 +320,9 @@
                     data: {
                         product_out: $scope.out,
                         product_id: $scope.product_id,
+                        sales_man_id: $scope.sales_man,
                     }
+                    
                 })
                     .then(function (response) {
                             // success
@@ -276,7 +356,7 @@
                         damage: damage,
                         damage_value: damage_value,
                         return: returnn,
-                        product_id: product_id,
+                        product_id: product_id,                        
                     }
                 })
                     .then(function (response) {
@@ -346,17 +426,81 @@
             $scope.countInit = function (mTotal, damage_value) {
 
                 $scope.sub_total = $scope.sub_total + mTotal;
+                $scope.damage_value = damage_value;
 
 
-                $scope.sub_total = 0;
-                $scope.damage_value =$scope.damage_value+damage_value;
-                $scope.net_amount = 0;
-                $scope.claim = 0;
-                $scope.due = 0;
-                $scope.cash = 0;
+
+                // $scope.sub_total = 0;
+                // $scope.damage_value =$scope.damage_value+damage_value;
+                 $scope.net_amount = $scope.sub_total-($scope.damage_value-$scope.claim);
+                 
+                // $scope.claim = 0;
+                // $scope.due = 0;
+                // $scope.cash = 0;
 
 
             }
+
+
+             $scope.addDetails = function () {
+                 $cash = $scope.net_amount-$scope.due;
+
+                $http({
+                    url: '/daily-details/data',
+                    method: "POST",
+                    data: {
+                        total_amount:$scope.sub_total,
+                        damage_value:$scope.damage_value,
+                        claim: $scope.claim,
+                        due: $scope.due,
+                        cash: $cash,
+                        net_amount: $scope.net_amount,
+                        sales_man_id: $scope.sales_man,
+                        product_id: $scope.product_id,
+                    }
+                    
+                })
+                    .then(function (response) {
+                            // success
+                            console.log(response.data);
+
+                            if (response.data.status == "success") {
+                                $scope.products = response.data.products;
+                                toaster.pop('success', "Data Inserted");
+
+                            } else {
+                                toaster.pop('error', "There is an error, try later");
+                            }
+
+                        },
+                        function (response) { // optional
+                            // failed
+                            console.log(response.data);
+                            toaster.pop('error', "There is an error, try later");
+                        });
+
+
+
+             $http({
+                    url: '/daily-sale/product/data',
+                    method: "GET",
+                    data: {
+                        product_out: $scope.out,
+                        product_id: $scope.product_id,
+                    }
+                })
+                .then(function (response) {
+                        // success
+                        console.log(response.data);
+
+                        $scope.products = response.data.products;
+                    },
+                    function (response) { // optional
+                        // failed
+                        console.log(response.data);
+                    });
+
+            };
 
         });
 

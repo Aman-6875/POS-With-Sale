@@ -21,29 +21,26 @@
         <div class="col-12">
             <div class="card-box">
                 <div class="row">
-                    
+                    <form method="GET" class="form-inline" action="/daily-sale/product/">
+                        <div class="form-group">
+                           
+                            <select class="form-control" name="sales_man_id">
+                                @foreach( $users as $user)
+                                <option value="{{ $user->sales_man_id}}">
+                                    {{ $user->sales_man_name }}
+                                </option>
+                            @endforeach
+                            </select>
+                          </div>
                         
-                            <div class="col-md-3">
-
-                                <select class=" form-control selectized" >
-                                    @foreach( $users as $user)
-                                         <option value="{{ $user->customer_id}}">
-                                             {{ $user->customer_name }}
-                                         </option>
-                                     @endforeach
-
-                                </select>
-
-                            </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-info waves-effect waves-light">Assign</button>
+                          </div>
 
                             
-                         <div class="col-3">
-                                    <a  href="/daily-sale/product" type="submit" class="btn btn-info waves-effect waves-light">Assign
-                                    </a>
-                         </div>
                            
 
-                        
+                    </form>
                      
                    
 

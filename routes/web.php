@@ -225,9 +225,20 @@ Route::get('/daily-sale', 'DailySaleController@index');
 
 Route::get('/daily-sale/product/result', 'DailySaleController@productResult');
 Route::get('/daily-sale/report', 'DailySaleController@report');
-Route::get('/daily-sale/product', 'DailySaleController@testproductView');
+Route::get('/daily-sale/product/', 'DailySaleController@testproductView');
 Route::any('/daily-sale/product/data', 'DailySaleController@testproductData');
 Route::post('/daily-sale/product/data/update', 'DailySaleController@testproductDataUpdate');
+Route::any('/daily-details/data', 'DailySaleController@dailyDetails');
+Route::get('/daily-sale/report', 'DailySaleController@report');
+
+
+//Manage Sales-Man
+Route::get('/sales-man/create', 'SalesManController@create');
+Route::get('/sales-man/show', 'SalesManController@index');
+Route::post('/sales-man/store', 'SalesManController@store');
+Route::get('/sales-man/edit/{sales_man_id}', 'SalesManController@edit');
+Route::post('/sales-man/update', 'SalesManController@update');
+Route::get('/sales-man/destroy/{sales_man_id}', 'SalesManController@destroy');
 
 
 
