@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Mockery\Generator\Method;
 use PHPUnit\Framework\Constraint\Exception;
 
 class DailySaleController extends Controller
@@ -151,7 +152,7 @@ class DailySaleController extends Controller
             'damage_value'=>0,
             'return'=>0,               
           ];
-          $d = DailySale::where('product_id',$product_id)->whereDate('created_at',$mytime)->get();
+          $d = DailySale::where('product_id',$product_id)->where('sales_man_id',$request->salse_man_id)->whereDate('created_at',$mytime)->get();
           if(Count($d)<1){
             $d = DailySale::create($dailySale);
             Purchase::where('product_details_id',$request->product_id)->decrement('quantity', $request['product_out']);
@@ -227,6 +228,8 @@ class DailySaleController extends Controller
 
         public function dailyDetails(Request $request)
         {
+
+            //return $request->all();
             $mytime =Carbon::now()->format('Y-m-d ');
 
             if ($request->isMethod('post')) {
@@ -237,6 +240,7 @@ class DailySaleController extends Controller
           //  return $request->all();
             $dailyDetails = [
                 'sales_man_id'=>$request['sales_man_id'],
+                'product_id'=>$request['product_id'],
                 'cash'=>$request['cash'],
                 'claim'=>$request['claim'],
                 'damage_value'=>$request['damage_value'],
@@ -278,24 +282,37 @@ class DailySaleController extends Controller
   
         }
         public function report(Request $request){
-            $mytime =Carbon::now()->format('Y-m-d ');
+              // return $request->all();
+                $mytime =Carbon::now()->format('Y-m-d ');
+                $products= Product::get();
+                $salse_man_id = null;
 
-
-            $products= Product::get();
+                if(!is_null($request->from_date)){
+                    
+                    $mytime = Carbon::parse($request->from_date)->format('Y-m-d ');
+                }
+                if(!is_null($request->sales_man_id)){
+                    
+                    $salse_man_id = $request->sales_man_id;
+                }
+            
+           
+            
             return view('pages.daily_sale.daily_sale_report')
             ->with('products',$products)
             ->with('mytime',$mytime)
-            ->with('sales_man_id',null);
+            ->with('sales_man_id',$salse_man_id)
+            ->with('users',SalesMan::get());
 
 
-            if(is_null($request->form_date)){
-                $data =  DailySale::join('products','daily_sales.product_id','=','products.product_id')
-                                ->leftJoin('sales_men','daily_sales.sales_man_id','=','sales_men.sales_man_id')
-                                ->leftJoin('daily_details','daily_sales.sales_man_id','=','daily_sales.sales_man_id')
-                                ->whereDate('daily_sales.created_at',$mytime)->select('daily_sales.*','daily_details.*','sales_men.sales_man_name','products.product_name')->get();
-             return view('pages.daily_sale.daily_sale_report')->with('products',$data);
+            // if(is_null($request->form_date)){
+            //     $data =  DailySale::join('products','daily_sales.product_id','=','products.product_id')
+            //                     ->leftJoin('sales_men','daily_sales.sales_man_id','=','sales_men.sales_man_id')
+            //                     ->leftJoin('daily_details','daily_sales.sales_man_id','=','daily_sales.sales_man_id')
+            //                     ->whereDate('daily_sales.created_at',$mytime)->select('daily_sales.*','daily_details.*','sales_men.sales_man_name','products.product_name')->get();
+            //  return view('pages.daily_sale.daily_sale_report')->with('products',$data);
 
-            }
+            
 
         
             

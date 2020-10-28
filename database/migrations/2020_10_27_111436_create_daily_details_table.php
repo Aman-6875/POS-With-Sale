@@ -16,6 +16,7 @@ class CreateDailyDetailsTable extends Migration
         Schema::create('daily_details', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger('sales_man_id');
+            $table->unsignedBigInteger('product_id');
             $table->double('total_amount')->default(0);
             $table->double('damage_value')->default(0);
             $table->double('claim')->default(0);

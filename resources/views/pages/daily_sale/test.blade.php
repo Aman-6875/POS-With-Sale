@@ -84,7 +84,7 @@
 
 
                                     <tr ng-repeat="product in products" ng-cloak
-                                        ng-init="countInit(((product.product_out-product.product_in)*product.rate),product.damage_value)">
+                                        ng-init="countInit(((product.product_out-product.product_in)*product.rate),product.damage_value,product.product_id)">
 
 
                                         <td> [- product.product_name -]</td>
@@ -259,9 +259,8 @@
         let tempData = [];
         app.controller('serviceController', function ($scope, $http, toaster) {
             console.log("jj");
-
             $scope.rate = 10;
-            $scope.product_id = '';
+            // $scope.product_id = '';
             $scope.in = 0;
             $scope.out = 0;
             $scope.rate = 0;
@@ -271,8 +270,6 @@
             $scope.claim = 0;
             $scope.due = 0;
             $scope.cash = 0;
-            
-            
             $scope.net_amount = 0;
             $scope.cash = 0;
            // $scope.sales_man = $sales_man_id;
@@ -321,8 +318,7 @@
                         product_out: $scope.out,
                         product_id: $scope.product_id,
                         sales_man_id: $scope.sales_man,
-                    }
-                    
+                    }  
                 })
                     .then(function (response) {
                             // success
@@ -423,10 +419,11 @@
                     });
 
 
-            $scope.countInit = function (mTotal, damage_value) {
+            $scope.countInit = function (mTotal, damage_value,product_id) {
 
                 $scope.sub_total = $scope.sub_total + mTotal;
-                $scope.damage_value = damage_value;
+                $scope.damage_value = $scope.damage_value+damage_value;
+                $scope.product_id= product_id;
 
 
 
@@ -444,6 +441,10 @@
 
              $scope.addDetails = function () {
                  $cash = $scope.net_amount-$scope.due;
+                
+                 
+                
+                //  console.log($product_id);
 
                 $http({
                     url: '/daily-details/data',

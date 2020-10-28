@@ -230,6 +230,7 @@ Route::any('/daily-sale/product/data', 'DailySaleController@testproductData');
 Route::post('/daily-sale/product/data/update', 'DailySaleController@testproductDataUpdate');
 Route::any('/daily-details/data', 'DailySaleController@dailyDetails');
 Route::get('/daily-sale/report', 'DailySaleController@report');
+// Route::get('/daily-sale/report', 'DailySaleController@report');
 
 
 //Manage Sales-Man

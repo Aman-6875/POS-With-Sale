@@ -31,7 +31,7 @@
                                 </option>
                             @endforeach
                             </select>
-                          </div>
+                       </div>
                         
                         <div class="form-group">
                             <button type="submit" class="btn btn-info waves-effect waves-light">Assign</button>

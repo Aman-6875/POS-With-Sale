@@ -10,26 +10,31 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="p-20">
-                            <form class="form-inline" method="post" action="/daily-sale/report/product"
+                            <form class="form-inline" method="post" action="/daily-sale/report"
                                   enctype="multipart/form-data">
 
                                 <div class="form-group col-md-4">
                                     <label class="col-5 col-form-label">From Date</label>
                                     <div class="col-7">
                                         <input type="text" class="form-control" name="from_date"
-                                               placeholder="mm/dd/yyyy" id="datepicker-autoclose" required>
+                                               placeholder="mm/dd/yyyy" id="datepicker-autoclose">
                                         <input type="hidden" class="form-control" name="_token"
                                                value="{{csrf_token()}}">
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label class="col-5 col-form-label">To Date</label>
-                                    <div class="col-7">
-                                        <input type="text" class="form-control" name="to_date" placeholder="mm/dd/yyyy"
-                                               id="datepicker" required>
-
-                                    </div>
+                                    <label class="col-5 col-form-label">Salesman</label>
+                                    <div class="form-group">
+                           
+                                        <select class="form-control" name="sales_man_id">
+                                            @foreach( $users as $salseman)
+                                            <option value="{{ $salseman->sales_man_id}}">
+                                                {{ $salseman->sales_man_name }}
+                                            </option>
+                                        @endforeach
+                                        </select>
+                                   </div>
                                 </div>
 
 
@@ -83,6 +88,7 @@
                         <thead>
                         <tr>
                             <th>#</th>
+                            <th>Date</th>
                 
                             <th>Product Name</th>
                             <th>Product Out</th>
@@ -93,6 +99,7 @@
                             <th>Product Total Amount</th>
                             <th>Product damage value</th>
                             <th>Claim</th>
+                            <th>Net Amount</th>
                             <th>Due</th>
                             <th>Cash</th>
                         </tr>
@@ -105,19 +112,20 @@
                             
                             <tr>
                                 <td>{{$i++}}</td>
+                                <td>{{$mytime}}</td>
                          
                                 <td>{{$product->product_name}}</td>
                                 <td>{{ getOutData($product->product_id, $mytime, $sales_man_id) }}</td>
-                                // <td>{{$product->product_out}}</td>
-                                // <td>{{$product->product_in}}</td>
-                                // <td>{{$product->damage}}</td>
+                                <td>{{ getInData($product->product_id, $mytime, $sales_man_id) }}</td>
+                                <td>{{ (getOutData($product->product_id, $mytime, $sales_man_id))-( getInData($product->product_id, $mytime, $sales_man_id)) }}</td>
+                                <td>{{ getDamageData($product->product_id, $mytime, $sales_man_id)}}</td>
+                                <td>{{ getTotalAmountData($product->product_id, $mytime, $sales_man_id)}}</td>
+                                <td>{{ getDamageValueData($product->product_id, $mytime, $sales_man_id)}}</td>
+                                <td>{{ getClaimData($product->product_id, $mytime, $sales_man_id)}}</td>
+                                <td>{{ getNetAmountData($product->product_id, $mytime, $sales_man_id)}}</td>
+                                <td>{{ getDueData($product->product_id, $mytime, $sales_man_id)}}</td>
+                                <td>{{ getCashData($product->product_id, $mytime, $sales_man_id)}}</td>
                                 
-                                // <td>{{$product->total_amount}}</td>
-                                // <td>{{$product->damage_value}}</td>
-                                // <td>{{$product->claim}}</td>
-                                // <td>{{$product->net_amount}}</td>
-                                // <td>{{$product->due}}</td>
-                                // <td>{{$product->cash}}</td>
                                 
 
                             </tr>
